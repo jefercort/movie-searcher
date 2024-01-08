@@ -1,10 +1,13 @@
 import './App.css'
-import responseMovies from "./mocks/with-results.json"
-import withoutResults from "./mocks/no-results.json"
+import { useMovies } from './hooks/useMovies'
 import { Movies } from './components/Movies'
 
+
 function App() {
-  const movies = responseMovies.Search
+
+  // Esto se pueden de esas dos formas
+  // const { movies: mappedMovies } = useMovies();
+  const { movies } = useMovies();
 
   return (
     <div className='page'>
@@ -17,6 +20,7 @@ function App() {
         </form>
       </header>
       <main>
+        {/* <Movies movies={mappedMovies} />         */}
         <Movies movies={movies} />
       </main>
 
