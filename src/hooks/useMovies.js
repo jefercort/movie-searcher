@@ -11,24 +11,29 @@ export function useMovies ({ search, sort }) {
   // Vamos a user el useRef para guardar una consulta anterior y aca lo inicializo con search pero puedo hacerlo con cualquier cosa
   const previousSearch = useRef(search)
 
-  const getMovies = async () => {
-    // aca lo que hago es que le doy click al boton y no hace la consulta porque ya se habia hecho
-    if (search === previousSearch.current) return
-    try {
-      setLoading(true);
-      setError(null);
-      previousSearch.current = search
-      const newMovies = await searchMovies({search})
-      setMovies(newMovies)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      // en el finally siempre se va a ejecutar ya si es try o catch se ejecyta al final es como un else del error 
-      setLoading(false)
+  // EL useMemo TAMBIEN FUNCIONA PARA FUNCIONES
+  const getMovies = useMemo(() => {
+    // cada vez que cambie el search se ejecuta get movies y ahi le pasamos toda la funcion desde el async
+    return async () => {
+      // aca lo que hago es que le doy click al boton y no hace la consulta porque ya se habia hecho
+      if (search === previousSearch.current) return
+      try {
+        setLoading(true);
+        setError(null);
+        previousSearch.current = search
+        const newMovies = await searchMovies({search})
+        setMovies(newMovies)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        // en el finally siempre se va a ejecutar ya si es try o catch se ejecyta al final es como un else del error 
+        setLoading(false)
+      }
+      // le pasamos el parametro y com oes una funcion asincrona usamos el async await
     }
-    // le pasamos el parametro y com oes una funcion asincrona usamos el async await
-  }
-
+    // cada vez que cambia el Search tenemos que volver a generar esta funcion
+    // si el parametro lo dejamos vacio no va a ocurrir nada porque se supone que cada vez qu cambie el search se debe ejecutar 
+  }, [search])
   // const getSortedMovies = () => {
   //   console.log("render", sortedMovies)
   //   // aca le decimos que hacemos una copia del array de objetos [...movies] y entramos a comparar entre a y b por titulos
@@ -42,7 +47,8 @@ export function useMovies ({ search, sort }) {
   const sortedMovies = useMemo(() => {
     console.log("sortedMovies")
     return (
-      sort ? [...movies].sort((a, b) => a.title.localCompare(b.title)) : movies
+      // console.log("Aca se ejecuta el sort", movies)
+      sort ? [ ...movies ].sort((a, b) => a.title.localCompare(b.title)) : movies
     )
       // cada vez que cambia sort porque significa que esta organizando el orden o el movies cuando cambien las peliculas
   }, [sort, movies])
