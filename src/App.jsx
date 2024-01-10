@@ -85,7 +85,7 @@ function App() {
     // // FORMA 2 CON JAVASCRIPT SOLAMENTE CUANDO SON MULTIPLES INPUTS TRANSFORMANDO TODO LOS CAMPOS CON Objet.fromEntries()
     // // con esta forma se recupera directamente la query
     // const { query } = Object.fromEntries(new window.FormData(event.target))
-    console.log({search})
+    // console.log({search})
     // // con esta forma se recupera todo el grupo de inputs
     // const fields = Object.fromEntries(new window.FormData(event.target))
     // console.log(fields)
