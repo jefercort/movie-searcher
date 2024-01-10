@@ -1,8 +1,11 @@
-import responseMovies from "../mocks/with-results.json"
+import withResults from "../mocks/with-results.json"
 import withoutResults from "../mocks/no-results.json"
+import { useState } from "react"
 // Vamos a hacer un custom Hook que se preocupe de ahcer todo el fetch de datos de la pelicula y datos y demas
+// Es un custome Hook y le pasamos parametros
+export function useMovies ({ search }) {
+    const [responseMovies, setResponseMovies] = useState([]);
 
-export function useMovies () {
     const movies = responseMovies.Search
   
     // Ahora vamos a mapear las movies para no depender exclusivamente de esa API ya que si se hace un cambio a futuro saldria muy costoso desligarse de la misma
@@ -14,6 +17,14 @@ export function useMovies () {
       image: movie.Poster
       
     }))
+
+    const getMovies = () => {
+      if (search) {
+        setResponseMovies(withResults)
+      } else {
+        setResponseMovies(withoutResults)
+      }
+    }
   
-    return { movies: mappedMovies }
+    return { movies: mappedMovies, getMovies }
   }

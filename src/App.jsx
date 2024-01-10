@@ -47,9 +47,10 @@ function App() {
 
   // Esto se pueden de esas dos formas
   // const { movies: mappedMovies } = useMovies();
-  const { movies } = useMovies();
   // Aca traigo lo que me retorna el use Search para poderlo utilizar desde otro componente independiente
   const { search, updateSearch, error } = useSearch();
+  // Aca le pasamos el parametro search para que exista la comunicacion 
+  const { movies, getMovies } = useMovies({ search });
 
 
 
@@ -88,6 +89,7 @@ function App() {
     // // con esta forma se recupera todo el grupo de inputs
     // const fields = Object.fromEntries(new window.FormData(event.target))
     // console.log(fields)
+    getMovies();
   } 
 
   // METODO DE FORMA CONTROLADA POR MEDIO DE ESTADOS
