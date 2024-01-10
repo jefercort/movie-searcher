@@ -1,11 +1,11 @@
 function ListOfMovies ({ movies }) {
     return (
-      <ul>
+      <ul className="movies">
         {
           // al realizar este .map podemos ahorrar mucho tiempo ya que de una vez sabemos como es la estructyra de la respuesta sin 
           // haber tenido que hacer un fetch
           movies.map((movie) => (
-            <li key={movie.id}>
+            <li className="movie" key={movie.id}>
               <h3>{movie.title}</h3>
               <p>{movie.year}</p>
               <img src={movie.image} alt={movie.title} />
