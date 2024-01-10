@@ -44,13 +44,14 @@ function useSearch () {
 // como un identificador, como un elemento del DOM como un contador como lo que tu quieras y que cada vez que cambia no vuelve a renderizar el componente, esto lo hace diferente del
 // useState porque cada vez que cambia vuelve a renderizar el componente, pero el useRef cada vez que cambia no renderiza el componente de nuevo 
 function App() {
-
+  const [sort, setSort] = useState(false)
   // Esto se pueden de esas dos formas
   // const { movies: mappedMovies } = useMovies();
   // Aca traigo lo que me retorna el use Search para poderlo utilizar desde otro componente independiente
   const { search, updateSearch, error } = useSearch();
   // Aca le pasamos el parametro search para que exista la comunicacion 
-  const { movies, loading, getMovies } = useMovies({ search });
+  // tambien le pasamos el parametro sort 
+  const { movies, loading, getMovies } = useMovies({ search, sort });
 
 
 
@@ -92,6 +93,12 @@ function App() {
     getMovies();
   } 
 
+
+  const handleSort = () => {
+    setSort(!sort)
+  }
+
+
   // METODO DE FORMA CONTROLADA POR MEDIO DE ESTADOS
   const handleChange = (event) => {
     // esta const la utilizamos para que tome el ultimo estado del evento 
@@ -112,6 +119,7 @@ function App() {
           {/* FORMA 2 */}
           <input onChange={handleChange} value={search} name='query' placeholder='Avangers, StarWars' />
           {/* <input name='segundo' placeholder='Avangers, StarWars' /> */}
+          <input type='checkbox' onChange={handleSort} checked={sort} />
           <button type='submit'>Buscar</button>
         </form>
         {error && <p style={{ color: "red" }}>{error}</p>}
