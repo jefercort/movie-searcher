@@ -50,7 +50,7 @@ function App() {
   // Aca traigo lo que me retorna el use Search para poderlo utilizar desde otro componente independiente
   const { search, updateSearch, error } = useSearch();
   // Aca le pasamos el parametro search para que exista la comunicacion 
-  const { movies, getMovies } = useMovies({ search });
+  const { movies, loading, getMovies } = useMovies({ search });
 
 
 
@@ -118,7 +118,10 @@ function App() {
       </header>
       <main>
         {/* <Movies movies={mappedMovies} />         */}
-        <Movies movies={movies} />
+        {
+          loading ? <p>Cargando ...</p> : <Movies movies={movies} />
+        }  
+        
       </main>
 
     </div>

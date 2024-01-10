@@ -1,37 +1,29 @@
-import withResults from "../mocks/with-results.json"
-import withoutResults from "../mocks/no-results.json"
 import { useState } from "react"
+import { searchMovies } from "../services/movies";
 // Vamos a hacer un custom Hook que se preocupe de ahcer todo el fetch de datos de la pelicula y datos y demas
 // Es un custome Hook y le pasamos parametros
 export function useMovies ({ search }) {
-    const [responseMovies, setResponseMovies] = useState([]);
+    const [movies, setMovies] = useState([]);
+    // podemos escalar este customeHook
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    const movies = responseMovies.Search
-  
-    // Ahora vamos a mapear las movies para no depender exclusivamente de esa API ya que si se hace un cambio a futuro saldria muy costoso desligarse de la misma
-    // Aca lo que hice fue controlar las variables que le vamos a enviar como props a el componente movies para que se renderice
-    const mappedMovies = movies?.map((movie) => ({
-      id: movie.imdbID,
-      title: movie.Title,
-      year: movie.Year,
-      image: movie.Poster
-      
-    }))
+    const getMovies = async () => {
 
-    const getMovies = () => {
-      if (search) {
-        // setResponseMovies(withResults)
-        // ACA EMPEZAMOS A HACER EL FETCH PARA LA API
-        // vamos a usar promesas para resolver esto
-        fetch(`http://www.omdbapi.com/?apikey=a028715b&s=${search}`)
-          .then((res) => res.json())
-          .then((json) => {
-            setResponseMovies(json)
-          })
-      } else {
-        setResponseMovies(withoutResults)
+      try {
+        setLoading(true);
+        setError(null)
+        const newMovies = await searchMovies({search})
+        setMovies(newMovies)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        // en el finally siempre se va a ejecutar ya si es try o catch se ejecyta al final es como un else del error 
+        setLoading(false)
       }
+      // le pasamos el parametro y com oes una funcion asincrona usamos el async await
     }
-  
-    return { movies: mappedMovies, getMovies }
+  // HEMOS CREADO UNA CAJA NEGRA QUE CONSTANTEMENTE ITERAMOS EN ELLA SI SE CUMPLE EL 
+  // CONTRATO EN MOVIES ESTA LA LISTA DE PELICULAS Y GETMOVIES VAS A TENER UNA FORMA DE RECUPERAR LAS PELOCULAS
+    return { movies, getMovies, loading }
   }
