@@ -1,8 +1,9 @@
-import './App.css'
+import './App.css';
 // import { useRef } from 'react';
-import { useMovies } from './hooks/useMovies'
-import { Movies } from './components/Movies'
-import { useEffect, useRef, useState } from 'react';
+import { useMovies } from './hooks/useMovies';
+import { Movies } from './components/Movies';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import debounce from "just-debounce-it"
 
 // LOS CUSTOME HOOK LOS UTILIZAMOS PARA EXTRAER LOGICA DE LOS COMPONENTES
 
@@ -53,13 +54,19 @@ function App() {
   // tambien le pasamos el parametro sort 
   const { movies, loading, getMovies } = useMovies({ search, sort });
 
+  const debounceGetMovies = useCallback(
+    debounce(search => {
+      console.log("Search", search)
+      getMovies({ search })
+    }, 300)
+    , [getMovies]
+  )
 
 
   // contador con useRef, este es un valor que persiste entre renders
   const counter = useRef(0)
   counter.current++
   console.log(counter.current)
-
 
 
   // FORMA 1 CON useRef()
@@ -102,11 +109,15 @@ function App() {
 
   // METODO DE FORMA CONTROLADA POR MEDIO DE ESTADOS
   const handleChange = (event) => {
+    // Para que cada vez que se escriba se ejecute la busqueda lo que hacemos es:
+    const newSearch = event.target.value
+
     // esta const la utilizamos para que tome el ultimo estado del evento 
     // esta prevalidacion la hago para que no ingresen datos con espacio al inicio
     // const newQuery = event.target.value
     // if (newQuery.startsWith(" ")) return
-    updateSearch(event.target.value)
+    updateSearch(newSearch)
+    debounceGetMovies({ newSearch })
   }
   
   return (

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import { searchMovies } from "../services/movies";
 // Vamos a hacer un custom Hook que se preocupe de ahcer todo el fetch de datos de la pelicula y datos y demas
 // Es un custome Hook y le pasamos parametros
@@ -11,11 +11,16 @@ export function useMovies ({ search, sort }) {
   // Vamos a user el useRef para guardar una consulta anterior y aca lo inicializo con search pero puedo hacerlo con cualquier cosa
   const previousSearch = useRef(search)
 
+  // AHORA LO QUE VAMOS A USAR ES EL useCALLBACK ES LO MISMO QUE EL useMemo PERO PENSADO PARA FUNCIONES, LO QUE SUCEDE TAMBIEN ES QUE 
+  // useMemo PODEMOS USARLO TAMBIEN PARA FUNCIONES YA QUE EL useCallback FUNCIONA CON EL USEMEMO POR DEBAJO, LO UNICO QUE PERMITE EL useCallback ES 
+  // SIMPLIFICAR LA SINTAXIS DE LA SIGUIENTE MANERA (YA NO ES NECESARIO PASARLE UNA FUNCION VACIA PARA QUE FUNCIONE) POR DEBAJO EL CALLBACK
+  // FUNCIONA IGUAL QUE EL USEMEMO
+
   // EL useMemo TAMBIEN FUNCIONA PARA FUNCIONES
-  PARA QUE LAS FUNCIONES SE EJECUTEN UNA SOLA VEZ LAS VAMOS A PASAR COMO PARAMETRO EN EL async
-  const getMovies = useMemo(() => {
+  // PARA QUE LAS FUNCIONES SE EJECUTEN UNA SOLA VEZ LAS VAMOS A PASAR COMO PARAMETRO EN EL async
+  const getMovies = useCallback(
     // cada vez que cambie el search se ejecuta get movies y ahi le pasamos toda la funcion desde el async
-    return async ({ search }) => {
+    async ({ search }) => {
       // aca lo que hago es que le doy click al boton y no hace la consulta porque ya se habia hecho
       if (search === previousSearch.current) return
       try {
@@ -31,10 +36,10 @@ export function useMovies ({ search, sort }) {
         setLoading(false)
       }
       // le pasamos el parametro y com oes una funcion asincrona usamos el async await
-    }
+    
     // cada vez que cambia el Search tenemos que volver a generar esta funcion
     // si el parametro lo dejamos vacio no va a ocurrir nada porque se supone que cada vez qu cambie el search se debe ejecutar 
-  }, [search])
+  }, [])
   // const getSortedMovies = () => {
   //   console.log("render", sortedMovies)
   //   // aca le decimos que hacemos una copia del array de objetos [...movies] y entramos a comparar entre a y b por titulos
