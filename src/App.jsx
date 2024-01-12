@@ -90,7 +90,8 @@ function App() {
     // // con esta forma se recupera todo el grupo de inputs
     // const fields = Object.fromEntries(new window.FormData(event.target))
     // console.log(fields)
-    getMovies();
+    // aca pasamos el search como parametro para que se ejecute una sola vez
+    getMovies({ search });
   } 
 
 

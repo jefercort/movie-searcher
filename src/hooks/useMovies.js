@@ -12,9 +12,10 @@ export function useMovies ({ search, sort }) {
   const previousSearch = useRef(search)
 
   // EL useMemo TAMBIEN FUNCIONA PARA FUNCIONES
+  PARA QUE LAS FUNCIONES SE EJECUTEN UNA SOLA VEZ LAS VAMOS A PASAR COMO PARAMETRO EN EL async
   const getMovies = useMemo(() => {
     // cada vez que cambie el search se ejecuta get movies y ahi le pasamos toda la funcion desde el async
-    return async () => {
+    return async ({ search }) => {
       // aca lo que hago es que le doy click al boton y no hace la consulta porque ya se habia hecho
       if (search === previousSearch.current) return
       try {
