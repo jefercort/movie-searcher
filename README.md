@@ -52,18 +52,6 @@ Movie Searcher is an interactive web application that allows users to search for
 - **Prettier** - Code formatting
 - **Git** - Version control
 
-## 📸 Screenshots
-
-<div align="center">
-  <img src="./screenshots/home.png" alt="Home Screen" width="45%" />
-  <img src="./screenshots/search-results.png" alt="Search Results" width="45%" />
-</div>
-
-<div align="center">
-  <img src="./screenshots/movie-details.png" alt="Movie Details" width="45%" />
-  <img src="./screenshots/mobile-view.png" alt="Mobile View" width="45%" />
-</div>
-
 ## 🔧 Installation
 
 ### Prerequisites
